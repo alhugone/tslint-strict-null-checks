@@ -29,4 +29,5 @@ export const testCases = [
     { source: `let a, b, c `, shouldWarn: true },
     { source: `let a=1, b=2, c `, shouldWarn: true },
     { source: `let a=1, b=2, c =3`, shouldWarn: false },
+    { source: `let a:any`, shouldWarn: true },
 ];
