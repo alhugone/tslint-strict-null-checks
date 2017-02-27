@@ -1,8 +1,8 @@
 import * as tslint from 'tslint';
-import * as TestCase from './noUnitialized.variableInitTestCases';
+import * as variableInit from './noUnitialized.variableInitTestCases';
 
 describe('no-uninitialized-non-undefined-var', () => {
-    TestCase.variableInitialization.forEach(function (test) {
+    variableInit.testCases.forEach(function (test) {
         it(`when variable of non-undefined type is not initialized when declared, should return failure: ${test.source}`, () => {
             let result: tslint.LintResult = lint(test.source);
             expect(result.failureCount !== 0).toBe(test.shouldWarn, 'Incorrect lint result');

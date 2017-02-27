@@ -1,4 +1,4 @@
-export const variableInitialization = [
+export const testCases = [
     { source: `let x`, shouldWarn: true },
     { source: `let x = 1`, shouldWarn: false },
     { source: `function f() { let x }`, shouldWarn: true },
