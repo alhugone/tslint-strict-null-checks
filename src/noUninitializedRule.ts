@@ -1,11 +1,10 @@
-import * as Path from 'path';
 import * as Lint from 'tslint';
 import * as ts from 'typescript';
 
 export class Rule extends Lint.Rules.AbstractRule {
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         let result = new Array<Lint.RuleFailure>();
-        return this.applyWithWalker(new NoUninitializedWalker(sourceFile, this.getOptions()))
+        return this.applyWithWalker(new NoUninitializedVariableWalker(sourceFile, this.getOptions()))
             .concat(this.applyWithWalker(new NoUninitializedPropertiesWalker(sourceFile, this.getOptions())));
 
     }
@@ -23,7 +22,7 @@ function isUndefinedInTypeDomain(type: ts.TypeNode): boolean {
 }
 
 // tslint:disable-next-line:max-classes-per-file
-class NoUninitializedWalker extends Lint.RuleWalker {
+class NoUninitializedVariableWalker extends Lint.RuleWalker {
 
     protected visitVariableDeclaration(node: ts.VariableDeclaration) {
         super.visitVariableDeclaration(node);
@@ -33,16 +32,12 @@ class NoUninitializedWalker extends Lint.RuleWalker {
             }
         }
     }
-
-    protected visitTypeAssertionExpression(node: ts.TypeAssertion) {
-        super.visitTypeAssertionExpression(node);
-
-    }
 }
 
 class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
 
     private _initializedProperties: string[][] = []
+
     find<T>(collection: T[], predicate: (it: T) => boolean): T | null {
         for (const item of collection) {
             if (predicate(item)) {
@@ -52,7 +47,7 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
         return null
     }
     visitClassDeclaration(node: ts.ClassDeclaration) {
-        if (!super.hasOption('type-assertion')) {
+        if (!super.hasOption('properties')) {
             return;
         }
         const _currentClassInitializedProperties: string[] = []
@@ -92,5 +87,4 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
             this.addFailureAt(node.getStart(), node.getEnd(), `Property '${node.name.getText()}' is never initialized`)
         }
     }
-
 }
