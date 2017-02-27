@@ -1,0 +1,19 @@
+{
+  "name": "TsLintRules",
+  "version": "1.0.0",
+  "description": "TSLint custom rules",
+  "main": "index.js",
+  "repository": {},
+  "scripts": {
+    "test": "tsc && jasmine ./dist/**/*.js"
+  },
+  "author": "Hugo <alhugone@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jasmine": "^2.5.41",
+    "@types/node": "^7.0.5",
+    "jasmine": "^2.5.3",
+    "tslint": "^4.4.2",
+    "typescript": "^2.1.6"
+  }
+}
