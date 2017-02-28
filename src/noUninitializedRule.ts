@@ -1,6 +1,7 @@
 import * as Lint from 'tslint';
 import * as ts from 'typescript';
 
+import { canNotBeUndefined, findConstructor, isUndefinedInDomainOf } from './Helpers';
 export class Rule extends Lint.Rules.AbstractRule {
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         let result = new Array<Lint.RuleFailure>();
@@ -10,24 +11,12 @@ export class Rule extends Lint.Rules.AbstractRule {
     }
 }
 
-function isUndefinedInTypeDomain(type: ts.TypeNode): boolean {
-    if (type === undefined) {
-        return false;
-    }
-    if ([ts.SyntaxKind.UnionType, ts.SyntaxKind.IntersectionType].indexOf(type.kind) !== -1) {
-        const unionOrIntersection = <ts.UnionOrIntersectionTypeNode> type;
-        return unionOrIntersection.types.some(isUndefinedInTypeDomain);
-    }
-    return [ts.SyntaxKind.UndefinedKeyword].indexOf(type.kind) !== -1;
-}
-
 // tslint:disable-next-line:max-classes-per-file
 class NoUninitializedVariableWalker extends Lint.RuleWalker {
-
     protected visitVariableDeclaration(node: ts.VariableDeclaration) {
         super.visitVariableDeclaration(node);
         if (super.hasOption('variable')) {
-            if (node.initializer === undefined && !isUndefinedInTypeDomain(node.type!)) {
+            if (node.initializer === undefined && !isUndefinedInDomainOf(node.type)) {
                 super.addFailureAt(node.getStart(), node.getEnd(), node.parent!.getText() + ' is uninitialized.');
             }
         }
@@ -36,37 +25,28 @@ class NoUninitializedVariableWalker extends Lint.RuleWalker {
 
 // tslint:disable-next-line:max-classes-per-file
 class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
-
     private _initializedProperties: string[][] = [];
 
-    find<T>(collection: T[], predicate: (it: T) => boolean): T | undefined {
-        for (const item of collection) {
-            if (predicate(item)) {
-                return item;
-            }
-        }
-        return undefined;
-    }
     visitClassDeclaration(node: ts.ClassDeclaration) {
         if (!super.hasOption('properties')) {
             return;
         }
         const _currentClassInitializedProperties: string[] = [];
-        const constructor = <ts.ConstructorDeclaration> this.find(node.members, it => it.kind === ts.SyntaxKind.Constructor);
+        const constructor = findConstructor(node.members);
         if (constructor && constructor.body) {
             for (const statement of constructor.body.statements) {
                 if (statement.kind !== ts.SyntaxKind.ExpressionStatement) {
                     continue;
                 }
-                const expressionStatement = <ts.ExpressionStatement> statement;
+                const expressionStatement = <ts.ExpressionStatement>statement;
                 if (expressionStatement.expression.kind !== ts.SyntaxKind.BinaryExpression) {
                     continue;
                 }
-                const binaryExpression = <ts.BinaryExpression> expressionStatement.expression;
+                const binaryExpression = <ts.BinaryExpression>expressionStatement.expression;
                 if (binaryExpression.left.kind !== ts.SyntaxKind.PropertyAccessExpression) {
                     continue;
                 }
-                const leftExpression = <ts.PropertyAccessExpression> binaryExpression.left;
+                const leftExpression = <ts.PropertyAccessExpression>binaryExpression.left;
                 if (leftExpression.expression.kind === ts.SyntaxKind.ThisKeyword) {
                     _currentClassInitializedProperties.push(leftExpression.name.getText());
                 }
@@ -79,13 +59,16 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
 
     visitPropertyDeclaration(node: ts.PropertyDeclaration) {
         super.visitPropertyDeclaration(node);
-        if (!super.hasOption('type-assertion')) {
+        if (!super.hasOption('properties')) {
             return;
         }
-        const nodeName = node.name.getText();
-        const isAssigned = this._initializedProperties[this._initializedProperties.length - 1].indexOf(nodeName) !== -1;
-        if (!node.initializer && !node.questionToken && !isUndefinedInTypeDomain(node.type!) && !isAssigned) {
+        if (this.isNotInitialized(node) && canNotBeUndefined(node)) {
             this.addFailureAt(node.getStart(), node.getEnd(), `Property '${node.name.getText()}' is never initialized`);
         }
+    }
+
+    private isNotInitialized(node: ts.PropertyDeclaration) {
+        const isNotAssigned = !(this._initializedProperties[this._initializedProperties.length - 1].indexOf(node.name.getText()) !== -1);
+        return !node.initializer && isNotAssigned;
     }
 }

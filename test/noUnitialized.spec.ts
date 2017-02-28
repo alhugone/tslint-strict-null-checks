@@ -12,7 +12,7 @@ describe('no-uninitialized-non-undefined-var', () => {
 
     typeAssertion.testCases.forEach(function (test) {
         it(`when variable of non-undefined type is not initialized when declared, should return failure: ${test.source}`, () => {
-            let result: tslint.LintResult = lint(test.source, ['type-assertion']);
+            let result: tslint.LintResult = lint(test.source, ['properties']);
             expect(result.failureCount !== 0).toBe(test.shouldWarn, 'Incorrect lint result');
         });
     });
