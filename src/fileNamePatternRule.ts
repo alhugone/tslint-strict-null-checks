@@ -15,7 +15,7 @@ class FileNamePatterWalker extends Lint.RuleWalker {
     constructor(sourceFile: ts.SourceFile, options: Lint.IOptions) {
         super(sourceFile, options);
         let regexString = options.ruleArguments.map(x => `(${x})`).join('|');
-        this._regex = new RegExp(regexString,'m');
+        this._regex = new RegExp(regexString, 'm');
     }
     protected visitSourceFile(node: ts.SourceFile): void {
         if (!this._regex.test(Path.basename(node.fileName))) {

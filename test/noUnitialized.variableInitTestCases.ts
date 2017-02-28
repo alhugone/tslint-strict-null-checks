@@ -6,16 +6,18 @@ export const testCases = [
     { source: `let f = () => { let x }`, shouldWarn: true },
     { source: `let f = () => { let x = 1 }`, shouldWarn: false },
     {
+        shouldWarn: true,
         source: `class X {
             method = function() {
                 let x;
-            }`, shouldWarn: true
+            }`,
     },
     {
+        shouldWarn: false,
         source: `class X {
             method = function() {
                 let x = 1;
-            }`, shouldWarn: false
+            }`,
     },
     { source: `let f: undefined`, shouldWarn: false },
     { source: `let f: number | undefined`, shouldWarn: false },

@@ -1,34 +1,35 @@
 export const testCases = [
     {
+        shouldWarn: true,
         source:
         `class X1 {
             prop1: string;
         }`,
-        shouldWarn: true
     },
     {
+        shouldWarn: false,
         source:
         `class X1 {
             prop1: string = '';
         }`,
-        shouldWarn: false
     },
     {
+        shouldWarn: false,
         source:
         `class X1 {
             prop1?: string;
         }`,
-        shouldWarn: false
     },
     {
+        shouldWarn: true,
         source:
         `class X1 {
             prop1: string;
             constructor() { }
         }`,
-        shouldWarn: true
     },
     {
+        shouldWarn: false,
         source:
         `class X1 {
             prop1: string;
@@ -36,30 +37,30 @@ export const testCases = [
                 this.prop1 = '';
             }
         }`,
-        shouldWarn: false
     },
     {
+        shouldWarn: false,
         source:
         `class X1 {
             prop1: string | undefined;
         }`,
-        shouldWarn: false
     },
     {
+        shouldWarn: true,
         source:
         `class X1 {
             prop1: string | null;
         }`,
-        shouldWarn: true
     },
     {
+        shouldWarn: true,
         source:
         `abstract class X1 {
             prop1: string;
         }`,
-        shouldWarn: true
     },
     {
+        shouldWarn: false,
         source:
         `abstract class X1 {
             prop1: string;
@@ -67,13 +68,5 @@ export const testCases = [
                 this.prop1 = '';
             }
         }`,
-        shouldWarn: false
     },
 ];
-
-class X1 {
-    prop1: string;
-    constructor() {
-
-    }
-}

@@ -1,6 +1,6 @@
 import * as tslint from 'tslint';
-import * as variableInit from './noUnitialized.variableInitTestCases';
 import * as typeAssertion from './noUnitialized.typeAssertionTestCases';
+import * as variableInit from './noUnitialized.variableInitTestCases';
 
 describe('no-uninitialized-non-undefined-var', () => {
     variableInit.testCases.forEach(function (test) {
@@ -27,7 +27,7 @@ function lint(source: string, options: string[]): tslint.LintResult {
     };
     let configuration = {
         rules: {
-            'no-uninitialized': [true, ...options]
+            'no-uninitialized': [true, ...options],
         },
     };
     let linter = new tslint.Linter(linterOptions, undefined);

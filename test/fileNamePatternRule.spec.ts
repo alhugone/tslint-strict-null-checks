@@ -1,7 +1,7 @@
 import * as tslint from 'tslint';
 
 describe('file-name-pattern', () => {
-    const _pattern: string[] = ['\\w+sufix.ts$', '^prefix\\w+.ts$']
+    const _pattern: string[] = ['\\w+sufix.ts$', '^prefix\\w+.ts$'];
     const tests = [
         { fileName: 'abc.ts', shouldWarn: true },
         { fileName: 'sufix.ts', shouldWarn: true },
