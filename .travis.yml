@@ -5,9 +5,4 @@ node_js:
 
 branches:
   only: master
-
-install:
-  - yarn
-
-script:
-  - npm test
+  
