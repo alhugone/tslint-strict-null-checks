@@ -5,4 +5,12 @@ node_js:
 
 branches:
   only: master
-  
+
+install:
+  - npm install istanbul -g
+  - npm install  
+
+script:
+  - npm run test-coverage-generate
+  - npm run test-coverage-remap
+  - npm run test-coverage-send
