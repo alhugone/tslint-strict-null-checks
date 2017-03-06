@@ -2,6 +2,12 @@ import * as Lint from 'tslint';
 import * as ts from 'typescript';
 
 import { canNotBeUndefined, findConstructor, isUndefinedInDomainOf } from './Helpers';
+
+export class Options {
+    static VARIABLES = 'variables';
+    static PROPERTIES = 'properties';
+}
+
 export class Rule extends Lint.Rules.AbstractRule {
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
         let result = new Array<Lint.RuleFailure>();
@@ -13,11 +19,12 @@ export class Rule extends Lint.Rules.AbstractRule {
 
 // tslint:disable-next-line:max-classes-per-file
 class NoUninitializedVariableWalker extends Lint.RuleWalker {
+
     protected visitVariableDeclaration(node: ts.VariableDeclaration) {
         super.visitVariableDeclaration(node);
-        if (super.hasOption('variable')) {
+        if (super.hasOption(Options.VARIABLES)) {
             if (node.initializer === undefined && !isUndefinedInDomainOf(node.type)) {
-                super.addFailureAt(node.getStart(), node.getEnd(), node.parent!.getText() + ' is uninitialized.');
+                super.addFailureAt(node.getStart(), node.getEnd(), node.parent!.getText() + ' is uninitialized and Undefined is not allowed.');
             }
         }
     }
@@ -25,10 +32,11 @@ class NoUninitializedVariableWalker extends Lint.RuleWalker {
 
 // tslint:disable-next-line:max-classes-per-file
 class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
+   
     private _initializedProperties: string[][] = [];
 
     visitClassDeclaration(node: ts.ClassDeclaration) {
-        if (!super.hasOption('properties')) {
+        if (!super.hasOption(Options.PROPERTIES)) {
             return;
         }
         const _currentClassInitializedProperties: string[] = [];
@@ -59,11 +67,11 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
 
     visitPropertyDeclaration(node: ts.PropertyDeclaration) {
         super.visitPropertyDeclaration(node);
-        if (!super.hasOption('properties')) {
+        if (!super.hasOption(Options.PROPERTIES)) {
             return;
         }
         if (this.isNotInitialized(node) && canNotBeUndefined(node)) {
-            this.addFailureAt(node.getStart(), node.getEnd(), `Property '${node.name.getText()}' is never initialized`);
+            this.addFailureAt(node.getStart(), node.getEnd(), `Property '${node.name.getText()}' is never initialized and Undefined is not allowed.`);
         }
     }
 
