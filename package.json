@@ -8,7 +8,7 @@
     "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
     "test": "tsc && jasmine ./dist/**/*.js",
     "test-coverage-generate": "tsc && istanbul cover --report lcovonly node_modules/jasmine/bin/jasmine.js ./dist/**/*.js",
-    "test-coverage-remap": " node ./node_modules/remap-istanbul/bin/remap-istanbul -i ./coverage/coverage.json -t lcovonly  -o ./coverage/lcov2.info",
+    "test-coverage-remap": " node ./node_modules/remap-istanbul/bin/remap-istanbul -i ./coverage/coverage.json -t lcovonly  -o ./coverage/lcov.info",
     "test-coverage-send": "cat coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm ./coverage -fr"
   },
   "author": "Hugo <alhugone@gmail.com>",
