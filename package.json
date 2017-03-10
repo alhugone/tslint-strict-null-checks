@@ -1,9 +1,7 @@
 {
   "name": "tslint-strict-null-checks",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "TSLint rules for strictNullChecks",
-  "main": "index.js",
-  "repository": {},
   "scripts": {
     "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
     "prepublish": "rm -fdr ./dist ./rules && npm run test && rm -fdr ./dist/test && mv dist/src rules",
@@ -14,6 +12,13 @@
   },
   "author": "Hugo <alhugone@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alhugone/tslint-strict-null-checks.git"
+  },
+  "bugs": {
+    "url": "https://github.com/alhugone/tslint-strict-null-checks/issues"
+  },
   "devDependencies": {
     "@types/jasmine": "^2.5.41",
     "@types/node": "^7.0.5",
