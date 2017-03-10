@@ -43,7 +43,7 @@ Configure tslint to use the tslint-strict-null-checks folder. Add the following 
 ```json
 {
    "rulesDirectory": [
-     "node_modules/tslint-strict-null-checks/dist"
+     "node_modules/tslint-strict-null-checks/rules"
    ],
    "rules": {
      ...
