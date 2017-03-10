@@ -7,7 +7,7 @@ TypeScript (latest release 2.2)  strictNullChecks is not reliable. It does not w
 
 Code that (should not) compiles in strictNullChecks:
 ```typescript
-cass X {
+class X {
     public x: number;
 }
 
