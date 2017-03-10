@@ -4,7 +4,7 @@
   "description": "TSLint rules for strictNullChecks",
   "scripts": {
     "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
-    "prepublish": "rm -fdr ./dist ./rules && npm run test && rm -fdr ./dist/test && mv dist/src rules",
+    "pre-publish": "rm -fr ./dist ./rules && npm run test && rm -fr ./dist/test && mv dist/src rules",
     "test": "tsc && jasmine ./dist/**/*.js",
     "test-coverage-generate": "tsc && istanbul cover --report lcovonly node_modules/jasmine/bin/jasmine.js ./dist/**/*.js",
     "test-coverage-remap": " node ./node_modules/remap-istanbul/bin/remap-istanbul -i ./coverage/coverage.json -t lcovonly  -o ./coverage/lcov.info",
