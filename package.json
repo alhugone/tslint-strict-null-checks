@@ -19,6 +19,12 @@
   "bugs": {
     "url": "https://github.com/alhugone/tslint-strict-null-checks/issues"
   },
+  "keywords": [
+    "tslint",
+    "typescript",
+    "strictNullChecks",
+    "rules"
+  ],
   "devDependencies": {
     "@types/jasmine": "^2.5.41",
     "@types/node": "^7.0.5",
