@@ -24,7 +24,7 @@ class NoUninitializedVariableWalker extends Lint.RuleWalker {
         super.visitVariableDeclaration(node);
         if (super.hasOption(Options.VARIABLES)) {
             if (node.initializer === undefined && !isUndefinedInDomainOf(node.type)) {
-                super.addFailureAt(node.getStart(), node.getEnd(), `Variable '${node.getText()}' is uninitialized. 'undefined' is not assignable to its type.`);
+                super.addFailureAt(node.getStart(), node.getEnd(), `Variable '${node.name.getText()}' is uninitialized. 'undefined' is not assignable to its type.`);
             }
         }
     }
