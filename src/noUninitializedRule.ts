@@ -24,7 +24,7 @@ class NoUninitializedVariableWalker extends Lint.RuleWalker {
         super.visitVariableDeclaration(node);
         if (super.hasOption(Options.VARIABLES)) {
             if (node.initializer === undefined && !isUndefinedInDomainOf(node.type)) {
-                super.addFailureAt(node.getStart(), node.getEnd(), node.parent!.getText() + ' is uninitialized and Undefined is not allowed.');
+                super.addFailureAt(node.getStart(), node.getEnd(), `Variable '${node.getText()}' is uninitialized. 'undefined' is not assignable to its type.`);
             }
         }
     }
@@ -71,7 +71,7 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
             return;
         }
         if (this.isNotInitialized(node) && canNotBeUndefined(node)) {
-            this.addFailureAt(node.getStart(), node.getEnd(), `Property '${node.name.getText()}' is never initialized and Undefined is not allowed.`);
+            this.addFailureAt(node.getStart(), node.getEnd(), `Property '${node.name.getText()}' is never initialized. 'undefined' is not assignable to its type.`);
         }
     }
 
