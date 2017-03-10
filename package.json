@@ -1,6 +1,6 @@
 {
   "name": "tslint-strict-null-checks",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "description": "TSLint rules for strictNullChecks",
   "scripts": {
     "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
