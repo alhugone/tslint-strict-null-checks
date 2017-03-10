@@ -1,0 +1,10 @@
+.travis.yml
+.vscode
+dist
+src
+test
+tsconfig.json
+tslint.json
+yarn.lock
+*.ts
+*.map
