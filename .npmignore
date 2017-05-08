@@ -1,0 +1,9 @@
+.npmrc
+.travis.yml
+.vscode
+tsconfig.json
+tslint.json
+yarn.lock
+/src/
+/test/
+/dist/test/
