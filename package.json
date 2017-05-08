@@ -1,25 +1,26 @@
 {
-  "name": "tslint-strict-null-checks",
-  "version": "1.0.0",
-  "description": "TSLint rules for strictNullChecks",
-  "main": "index.js",
-  "repository": {},
-  "scripts": {
-    "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
-    "test": "tsc && jasmine ./dist/**/*.js",
-    "test-coverage-generate": "tsc && istanbul cover --report lcovonly node_modules/jasmine/bin/jasmine.js ./dist/**/*.js",
-    "test-coverage-remap": " node ./node_modules/remap-istanbul/bin/remap-istanbul -i ./coverage/coverage.json -t lcovonly  -o ./coverage/lcov.info",
-    "test-coverage-send": "cat coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm ./coverage -fr"
-  },
-  "author": "Hugo <alhugone@gmail.com>",
-  "license": "MIT",
-  "devDependencies": {
-    "@types/jasmine": "^2.5.41",
-    "@types/node": "^7.0.5",
-    "coveralls": "^2.12.0",
-    "jasmine": "^2.5.3",
-    "remap-istanbul": "^0.9.1",
-    "tslint": "^4.4.2",
-    "typescript": "^2.1.6"
-  }
+    "name": "tslint-strict-null-checks",
+    "version": "1.0.0",
+    "description": "TSLint rules for strictNullChecks",
+    "main": "dist/index.js",
+    "repository": {},
+    "scripts": {
+        "build": "tsc",
+        "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
+        "test": "tsc && jasmine ./dist/**/*.js",
+        "test-coverage-generate": "tsc && istanbul cover --report lcovonly node_modules/jasmine/bin/jasmine.js ./dist/**/*.js",
+        "test-coverage-remap": " node ./node_modules/remap-istanbul/bin/remap-istanbul -i ./coverage/coverage.json -t lcovonly  -o ./coverage/lcov.info",
+        "test-coverage-send": "cat coverage/lcov.info | node ./node_modules/coveralls/bin/coveralls.js && rm ./coverage -fr"
+    },
+    "author": "Hugo <alhugone@gmail.com>",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jasmine": "^2.5.41",
+        "@types/node": "^7.0.5",
+        "coveralls": "^2.12.0",
+        "jasmine": "^2.5.3",
+        "remap-istanbul": "^0.9.1",
+        "tslint": "^4.4.2",
+        "typescript": "^2.1.6"
+    }
 }
