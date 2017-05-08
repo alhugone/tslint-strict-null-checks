@@ -1,7 +1,7 @@
 import * as Lint from 'tslint';
 import * as ts from 'typescript';
 
-import { canNotBeUndefined, findConstructor, isUndefinedInDomainOf } from './Helpers';
+import { canNotBeUndefined, findConstructor, isDeclaredInForStatement, isUndefinedInDomainOf } from './Helpers';
 
 export class Options {
     static VARIABLES = 'variables';
@@ -10,10 +10,8 @@ export class Options {
 
 export class Rule extends Lint.Rules.AbstractRule {
     public apply(sourceFile: ts.SourceFile): Lint.RuleFailure[] {
-        let result = new Array<Lint.RuleFailure>();
         return this.applyWithWalker(new NoUninitializedVariableWalker(sourceFile, this.getOptions()))
             .concat(this.applyWithWalker(new NoUninitializedPropertiesWalker(sourceFile, this.getOptions())));
-
     }
 }
 
@@ -23,8 +21,8 @@ class NoUninitializedVariableWalker extends Lint.RuleWalker {
     protected visitVariableDeclaration(node: ts.VariableDeclaration) {
         super.visitVariableDeclaration(node);
         if (super.hasOption(Options.VARIABLES)) {
-            if (node.initializer === undefined && !isUndefinedInDomainOf(node.type)) {
-                super.addFailureAt(node.getStart(), node.getEnd(), node.parent!.getText() + ' is uninitialized and Undefined is not allowed.');
+            if (node.initializer === undefined && !isUndefinedInDomainOf(node.type) && !isDeclaredInForStatement(node)) {
+                 super.addFailureAt(node.getStart(), node.getEnd(), node.parent!.getText() + ' is uninitialized and Undefined is not allowed.');
             }
         }
     }

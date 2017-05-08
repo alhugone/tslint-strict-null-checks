@@ -1,4 +1,3 @@
-import * as Lint from 'tslint';
 import * as ts from 'typescript';
 
 export function canNotBeUndefined(node?: ts.PropertyDeclaration): boolean {
@@ -23,4 +22,14 @@ export function isUndefinedInDomainOf(type?: ts.TypeNode): boolean {
         return unionOrIntersection.types.some(isUndefinedInDomainOf);
     }
     return [ts.SyntaxKind.UndefinedKeyword].indexOf(type.kind) !== -1;
+}
+
+export function isDeclaredInForStatement( node: ts.VariableDeclaration): boolean {
+    if( node.parent !== undefined
+        && (node.parent.kind === ts.SyntaxKind.VariableDeclarationList)
+        && (node.parent.parent !== undefined)) {
+            const n=node.parent.parent;
+            return n.kind===ts.SyntaxKind.ForStatement || n.kind===ts.SyntaxKind.ForInStatement || n.kind===ts.SyntaxKind.ForOfStatement;
+    }
+    return false;
 }
