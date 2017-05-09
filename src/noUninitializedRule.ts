@@ -1,7 +1,7 @@
+// tslint:disable:max-classes-per-file
 import * as Lint from 'tslint';
 import * as ts from 'typescript';
-
-import { canNotBeUndefined, findConstructor, isUndefinedInDomainOf } from './Helpers';
+import { canNotBeUndefined, findConstructor, isDeclaredInForStatement, isUndefinedInDomainOf } from './Helpers';
 
 export class Options {
     static VARIABLES = 'variables';
@@ -17,22 +17,23 @@ export class Rule extends Lint.Rules.AbstractRule {
     }
 }
 
-// tslint:disable-next-line:max-classes-per-file
 class NoUninitializedVariableWalker extends Lint.RuleWalker {
 
     protected visitVariableDeclaration(node: ts.VariableDeclaration) {
         super.visitVariableDeclaration(node);
         if (super.hasOption(Options.VARIABLES)) {
-            if (node.initializer === undefined && !isUndefinedInDomainOf(node.type)) {
-                super.addFailureAt(node.getStart(), node.getEnd(), `Variable '${node.name.getText()}' is uninitialized. 'undefined' is not assignable to its type.`);
+            if (node.initializer === undefined && !isUndefinedInDomainOf(node.type) && !isDeclaredInForStatement(node)) {
+                super.addFailureAt(
+                    node.getStart(),
+                    node.getEnd(),
+                    `Variable '${node.name.getText()}' is uninitialized. 'undefined' is not assignable to its type.`);
             }
         }
     }
 }
 
-// tslint:disable-next-line:max-classes-per-file
 class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
-   
+
     private _initializedProperties: string[][] = [];
 
     visitClassDeclaration(node: ts.ClassDeclaration) {
@@ -46,15 +47,15 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
                 if (statement.kind !== ts.SyntaxKind.ExpressionStatement) {
                     continue;
                 }
-                const expressionStatement = <ts.ExpressionStatement>statement;
+                const expressionStatement = <ts.ExpressionStatement> statement;
                 if (expressionStatement.expression.kind !== ts.SyntaxKind.BinaryExpression) {
                     continue;
                 }
-                const binaryExpression = <ts.BinaryExpression>expressionStatement.expression;
+                const binaryExpression = <ts.BinaryExpression> expressionStatement.expression;
                 if (binaryExpression.left.kind !== ts.SyntaxKind.PropertyAccessExpression) {
                     continue;
                 }
-                const leftExpression = <ts.PropertyAccessExpression>binaryExpression.left;
+                const leftExpression = <ts.PropertyAccessExpression> binaryExpression.left;
                 if (leftExpression.expression.kind === ts.SyntaxKind.ThisKeyword) {
                     _currentClassInitializedProperties.push(leftExpression.name.getText());
                 }
@@ -71,7 +72,10 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
             return;
         }
         if (this.isNotInitialized(node) && canNotBeUndefined(node)) {
-            this.addFailureAt(node.getStart(), node.getEnd(), `Property '${node.name.getText()}' is never initialized. 'undefined' is not assignable to its type.`);
+            this.addFailureAt(
+                node.getStart(),
+                node.getEnd(),
+                `Property '${node.name.getText()}' is never initialized. 'undefined' is not assignable to its type.`);
         }
     }
 

@@ -19,8 +19,20 @@ export function isUndefinedInDomainOf(type?: ts.TypeNode): boolean {
         return false;
     }
     if ([ts.SyntaxKind.UnionType, ts.SyntaxKind.IntersectionType].indexOf(type.kind) !== -1) {
-        const unionOrIntersection = <ts.UnionOrIntersectionTypeNode>type;
+        const unionOrIntersection = <ts.UnionOrIntersectionTypeNode> type;
         return unionOrIntersection.types.some(isUndefinedInDomainOf);
     }
     return [ts.SyntaxKind.UndefinedKeyword].indexOf(type.kind) !== -1;
+}
+
+export function isDeclaredInForStatement( node: ts.VariableDeclaration): boolean {
+    if (node.parent !== undefined
+        && (node.parent.kind === ts.SyntaxKind.VariableDeclarationList)
+        && (node.parent.parent !== undefined)) {
+            const n = node.parent.parent;
+            return n.kind === ts.SyntaxKind.ForStatement
+                || n.kind === ts.SyntaxKind.ForInStatement
+                || n.kind === ts.SyntaxKind.ForOfStatement;
+    }
+    return false;
 }

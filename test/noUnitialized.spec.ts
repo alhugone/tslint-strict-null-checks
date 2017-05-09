@@ -1,8 +1,8 @@
 import * as tslint from 'tslint';
+import { lint } from './helper';
 import * as propertyInit from './noUnitialized.propertyInitTestCases';
 import * as variableInit from './noUnitialized.variableInitTestCases';
-import * as forvariableInit from './noUnitialized.variableInitTestCases.for.statements';
-import { lint } from './helper';
+import * as variableInitInForStatement from './noUnitialized.variableInitTestCases.for.statements';
 
 describe('no-uninitialized variables', () => {
 
@@ -12,8 +12,8 @@ describe('no-uninitialized variables', () => {
             expect(result.failureCount !== 0).toBe(test.shouldWarn, 'Incorrect lint result');
         });
     });
-    
-    forvariableInit.testCases.forEach(function (test) {
+
+    variableInitInForStatement.testCases.forEach(function (test) {
         it(`when declared variable of non-undefined type is used in for statement, should return failure: ${test.source}`, () => {
             let result: tslint.LintResult = lint(test.source, ['variables']);
             expect(result.failureCount !== 0).toBe(test.shouldWarn, 'Incorrect lint result');
