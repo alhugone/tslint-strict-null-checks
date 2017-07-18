@@ -1,7 +1,7 @@
 // tslint:disable:max-classes-per-file
 import * as Lint from 'tslint';
 import * as ts from 'typescript';
-import { canNotBeUndefined, findConstructor, isDeclaredInForStatement, isUndefinedInDomainOf } from './Helpers';
+import { canNotBeUndefined, findConstructor, isDeclaredInCatch, isDeclaredInForStatement, isUndefinedInDomainOf } from './Helpers';
 
 export class Options {
     static VARIABLES = 'variables';
@@ -22,7 +22,10 @@ class NoUninitializedVariableWalker extends Lint.RuleWalker {
     protected visitVariableDeclaration(node: ts.VariableDeclaration) {
         super.visitVariableDeclaration(node);
         if (super.hasOption(Options.VARIABLES)) {
-            if (node.initializer === undefined && !isUndefinedInDomainOf(node.type) && !isDeclaredInForStatement(node)) {
+            if (node.initializer === undefined
+                && !isUndefinedInDomainOf(node.type)
+                && !isDeclaredInForStatement(node)
+                && !isDeclaredInCatch(node)) {
                 super.addFailureAt(
                     node.getStart(),
                     node.getEnd(),
@@ -47,15 +50,15 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
                 if (statement.kind !== ts.SyntaxKind.ExpressionStatement) {
                     continue;
                 }
-                const expressionStatement = <ts.ExpressionStatement> statement;
+                const expressionStatement = <ts.ExpressionStatement>statement;
                 if (expressionStatement.expression.kind !== ts.SyntaxKind.BinaryExpression) {
                     continue;
                 }
-                const binaryExpression = <ts.BinaryExpression> expressionStatement.expression;
+                const binaryExpression = <ts.BinaryExpression>expressionStatement.expression;
                 if (binaryExpression.left.kind !== ts.SyntaxKind.PropertyAccessExpression) {
                     continue;
                 }
-                const leftExpression = <ts.PropertyAccessExpression> binaryExpression.left;
+                const leftExpression = <ts.PropertyAccessExpression>binaryExpression.left;
                 if (leftExpression.expression.kind === ts.SyntaxKind.ThisKeyword) {
                     _currentClassInitializedProperties.push(leftExpression.name.getText());
                 }
