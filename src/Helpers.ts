@@ -19,7 +19,7 @@ export function isUndefinedInDomainOf(type?: ts.TypeNode): boolean {
         return false;
     }
     if ([ts.SyntaxKind.UnionType, ts.SyntaxKind.IntersectionType].indexOf(type.kind) !== -1) {
-        const unionOrIntersection = <ts.UnionOrIntersectionTypeNode>type;
+        const unionOrIntersection = <ts.UnionOrIntersectionTypeNode> type;
         return unionOrIntersection.types.some(isUndefinedInDomainOf);
     }
     return [ts.SyntaxKind.UndefinedKeyword].indexOf(type.kind) !== -1;

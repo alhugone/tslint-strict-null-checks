@@ -50,15 +50,15 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
                 if (statement.kind !== ts.SyntaxKind.ExpressionStatement) {
                     continue;
                 }
-                const expressionStatement = <ts.ExpressionStatement>statement;
+                const expressionStatement = <ts.ExpressionStatement> statement;
                 if (expressionStatement.expression.kind !== ts.SyntaxKind.BinaryExpression) {
                     continue;
                 }
-                const binaryExpression = <ts.BinaryExpression>expressionStatement.expression;
+                const binaryExpression = <ts.BinaryExpression> expressionStatement.expression;
                 if (binaryExpression.left.kind !== ts.SyntaxKind.PropertyAccessExpression) {
                     continue;
                 }
-                const leftExpression = <ts.PropertyAccessExpression>binaryExpression.left;
+                const leftExpression = <ts.PropertyAccessExpression> binaryExpression.left;
                 if (leftExpression.expression.kind === ts.SyntaxKind.ThisKeyword) {
                     _currentClassInitializedProperties.push(leftExpression.name.getText());
                 }
