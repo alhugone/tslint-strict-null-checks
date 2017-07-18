@@ -3,7 +3,7 @@
 
 # TsLint rules preventing undefined leaks in strictNullChecks mode
 
-TypeScript (latest release 2.2)  strictNullChecks is not reliable. It does not work as it should at least in two basic cases. It does not enforce initialization of varaiables and properties, so they will be `undefined`, even if `undefined` is not in the domian.
+TypeScript (latest release 2.4.1) strictNullChecks is not reliable. It does not work as it should at least in two basic cases. It does not enforce initialization of varaiables and properties, so they will be `undefined`, even if `undefined` is not in the domian.
 
 Code that (should not) compiles in strictNullChecks:
 ```typescript
@@ -36,7 +36,7 @@ With ts-strict-null-checks You will be warned about not initialized variables an
 Install from npm to your devDependencies:
 
 ```sh
-npm install --save-dev tslint-strict-null-checks 
+npm install --save-dev tslint-strict-null-checks
 ```
 Configure tslint to use the tslint-strict-null-checks folder. Add the following path to the `rulesDirectory` setting in your `tslint.json` file:
 
