@@ -3,6 +3,7 @@ import { lint } from './helper';
 import * as propertyInit from './noUnitialized.propertyInitTestCases';
 import * as variableInit from './noUnitialized.variableInitTestCases';
 import * as variableInitInForStatement from './noUnitialized.variableInitTestCases.for.statements';
+import * as catchBlock from './noUnitialized.variableInitTestCases.catch.block';
 
 describe('no-uninitialized variables', () => {
 
@@ -25,6 +26,16 @@ describe('no-uninitialized properties', () => {
 
     propertyInit.testCases.forEach(function (test) {
         it(`when class property of non-undefined type is not explicitly initialized, should return failure: ${test.source}`, () => {
+            let result: tslint.LintResult = lint(test.source, ['properties']);
+            expect(result.errorCount !== 0).toBe(test.shouldWarn, 'Incorrect lint result');
+        });
+    });
+});
+
+describe('no-uninitialized catch block', () => {
+
+    catchBlock.testCases.forEach(function (test) {
+        it(`when variable is declared as exception in catch block, should return failure: ${test.source}`, () => {
             let result: tslint.LintResult = lint(test.source, ['properties']);
             expect(result.errorCount !== 0).toBe(test.shouldWarn, 'Incorrect lint result');
         });
