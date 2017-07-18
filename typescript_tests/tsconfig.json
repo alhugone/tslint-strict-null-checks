@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "suppressImplicitAnyIndexErrors": true,
+    "outDir": "./dist",
+    "removeComments": true,
+    "strict": true
+  },
+  "include": [
+    "*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
