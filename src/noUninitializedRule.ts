@@ -39,17 +39,17 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
 
     private _initializedProperties: string[][] = [];
 
-    visitClassLikeDeclaration(
+    private visitClassLikeDeclaration(
         node: ts.ClassDeclaration,
-        superMethod: Lint.RuleWalker['visitClassDeclaration'],
+        superMethodName: 'visitClassDeclaration',
     ): void;
-    visitClassLikeDeclaration(
+    private visitClassLikeDeclaration(
         node: ts.ClassExpression,
-        superMethod: Lint.RuleWalker['visitClassExpression'],
+        superMethodName: 'visitClassExpression',
     ): void;
-    visitClassLikeDeclaration(
+    private visitClassLikeDeclaration(
         node: ts.ClassDeclaration | ts.ClassExpression,
-        superMethod: Lint.RuleWalker['visitClassDeclaration'] | Lint.RuleWalker['visitClassExpression'],
+        superMethodName: 'visitClassDeclaration' | 'visitClassExpression',
     ): void {
         if (!super.hasOption(Options.PROPERTIES)) {
             return;
@@ -76,16 +76,20 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
             }
         }
         this._initializedProperties.push(_currentClassInitializedProperties);
-        superMethod.call(this, node);
+        // Casting is necessary because the compiler believes there may be a mismatch
+        // between the super method's signature and the type of 'node'.
+        // Casting is safe because the overloaded signatures guarantee that this method
+        // cannot be called (within typescript code) with a mismatch.
+        (super[superMethodName] as (node: ts.ClassLikeDeclaration) => void)(node);
         this._initializedProperties.pop();
     }
 
     visitClassDeclaration(node: ts.ClassDeclaration) {
-        this.visitClassLikeDeclaration(node, super.visitClassDeclaration);
+        this.visitClassLikeDeclaration(node, 'visitClassDeclaration');
     }
 
     visitClassExpression(node: ts.ClassExpression) {
-        this.visitClassLikeDeclaration(node, super.visitClassExpression);
+        this.visitClassLikeDeclaration(node, 'visitClassExpression');
     }
 
     visitPropertyDeclaration(node: ts.PropertyDeclaration) {
