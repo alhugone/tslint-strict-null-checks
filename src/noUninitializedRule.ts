@@ -39,7 +39,18 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
 
     private _initializedProperties: string[][] = [];
 
-    visitClassDeclaration(node: ts.ClassDeclaration) {
+    visitClassLikeDeclaration(
+        node: ts.ClassDeclaration,
+        superMethod: Lint.RuleWalker['visitClassDeclaration'],
+    ): void;
+    visitClassLikeDeclaration(
+        node: ts.ClassExpression,
+        superMethod: Lint.RuleWalker['visitClassExpression'],
+    ): void;
+    visitClassLikeDeclaration(
+        node: ts.ClassDeclaration | ts.ClassExpression,
+        superMethod: Lint.RuleWalker['visitClassDeclaration'] | Lint.RuleWalker['visitClassExpression'],
+    ): void {
         if (!super.hasOption(Options.PROPERTIES)) {
             return;
         }
@@ -65,8 +76,16 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
             }
         }
         this._initializedProperties.push(_currentClassInitializedProperties);
-        super.visitClassDeclaration(node);
+        superMethod.call(this, node);
         this._initializedProperties.pop();
+    }
+
+    visitClassDeclaration(node: ts.ClassDeclaration) {
+        this.visitClassLikeDeclaration(node, super.visitClassDeclaration);
+    }
+
+    visitClassExpression(node: ts.ClassExpression) {
+        this.visitClassLikeDeclaration(node, super.visitClassExpression);
     }
 
     visitPropertyDeclaration(node: ts.PropertyDeclaration) {
