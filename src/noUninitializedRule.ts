@@ -18,6 +18,13 @@ export class Rule extends Lint.Rules.AbstractRule {
 }
 
 class NoUninitializedVariableWalker extends Lint.RuleWalker {
+    protected visitModuleDeclaration(node: ts.ModuleDeclaration): void {
+        // By doing nothing and not calling the super implementation, this prevents anything within a
+        // module declaration from being considered by this rule.
+        // Module declarations are "ambient contexts" where initializations are not allowed, so it is
+        // nonsense to check for uninitialized variables within such a context.
+        return;
+    }
 
     protected visitVariableDeclaration(node: ts.VariableDeclaration) {
         super.visitVariableDeclaration(node);
@@ -38,15 +45,15 @@ class NoUninitializedVariableWalker extends Lint.RuleWalker {
 class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
 
     private _initializedProperties: string[][] = [];
-
-    private visitClassLikeDeclaration(
-        node: ts.ClassDeclaration,
-        superMethodName: 'visitClassDeclaration',
-    ): void;
-    private visitClassLikeDeclaration(
-        node: ts.ClassExpression,
-        superMethodName: 'visitClassExpression',
-    ): void;
+    
+    protected visitModuleDeclaration(node: ts.ModuleDeclaration): void {
+        // By doing nothing and not calling the super implementation, this prevents anything within a
+        // module declaration from being considered by this rule.
+        // Module declarations are "ambient contexts" where initializations are not allowed, so it is
+        // nonsense to check for uninitialized properties within such a context.
+        return;
+    }
+    
     private visitClassLikeDeclaration(
         node: ts.ClassDeclaration | ts.ClassExpression,
         superMethodName: 'visitClassDeclaration' | 'visitClassExpression',
