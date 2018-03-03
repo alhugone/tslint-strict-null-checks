@@ -55,8 +55,8 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
     }
 
     private visitClassLikeDeclaration(
-        node: ts.ClassDeclaration | ts.ClassExpression,
-        superMethodName: 'visitClassDeclaration' | 'visitClassExpression',
+        node: ts.ClassLikeDeclaration,
+        superVisitClassLikeDeclaration: (node: ts.ClassLikeDeclaration) => void,
     ): void {
         if (!super.hasOption(Options.PROPERTIES)) {
             return;
@@ -83,20 +83,16 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
             }
         }
         this._initializedProperties.push(_currentClassInitializedProperties);
-        // Casting is necessary because the compiler believes there may be a mismatch
-        // between the super method's signature and the type of 'node'.
-        // Casting is safe because the overloaded signatures guarantee that this method
-        // cannot be called (within typescript code) with a mismatch.
-        (super[superMethodName] as (node: ts.ClassLikeDeclaration) => void)(node);
+        superVisitClassLikeDeclaration(node);
         this._initializedProperties.pop();
     }
 
     visitClassDeclaration(node: ts.ClassDeclaration) {
-        this.visitClassLikeDeclaration(node, 'visitClassDeclaration');
+        this.visitClassLikeDeclaration(node, (x: ts.ClassDeclaration) => super.visitClassDeclaration(x));
     }
 
     visitClassExpression(node: ts.ClassExpression) {
-        this.visitClassLikeDeclaration(node, 'visitClassExpression');
+        this.visitClassLikeDeclaration(node, (x: ts.ClassExpression) => super.visitClassExpression(x));
     }
 
     visitPropertyDeclaration(node: ts.PropertyDeclaration) {
