@@ -32,4 +32,13 @@ export const testCases = [
     { source: `let a=1, b=2, c `, shouldWarn: true },
     { source: `let a=1, b=2, c =3`, shouldWarn: false },
     { source: `let a:any`, shouldWarn: true },
+    {
+        shouldWarn: false,
+        source: `
+            declare module "foo" {
+                const value: number;
+                export default value;
+            }
+        `,
+    },
 ];

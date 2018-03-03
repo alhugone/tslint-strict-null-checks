@@ -69,4 +69,26 @@ export const testCases = [
             }
         }`,
     },
+    {
+        shouldWarn: false,
+        source: `
+            declare module "foo" {
+                class X1 {
+                    public prop1: string;
+                }
+                export default X1;
+            }
+        `,
+    },
+    {
+        shouldWarn: false,
+        source: `
+            declare module "foo" {
+                abstract class X1 {
+                    public prop1: string;
+                }
+                export default X1;
+            }
+        `,
+    },
 ];
