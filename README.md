@@ -55,7 +55,7 @@ Configure tslint to use the tslint-strict-null-checks folder. Add the following 
 
 ### Rule: `no-uninitialized`
 
-Enforces initalization of variables and properties, when `undefined` is not in thier domain.
+Enforces initialization of variables and properties, when `undefined` is not in their domain.
 
  ```json
 "no-uninitialized": [true, "variables", "properties"]
