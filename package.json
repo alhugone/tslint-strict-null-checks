@@ -1,6 +1,6 @@
 {
   "name": "tslint-strict-null-checks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TsLint rules preventing undefined leaks in strictNullChecks mode.",
   "scripts": {
     "lint": "tslint ./src/**/*.ts ./test/**/*.ts",
