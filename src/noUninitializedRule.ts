@@ -45,7 +45,7 @@ class NoUninitializedVariableWalker extends Lint.RuleWalker {
 class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
 
     private _initializedProperties: string[][] = [];
-    
+
     protected visitModuleDeclaration(node: ts.ModuleDeclaration): void {
         // By doing nothing and not calling the super implementation, this prevents anything within a
         // module declaration from being considered by this rule.
@@ -53,7 +53,7 @@ class NoUninitializedPropertiesWalker extends Lint.RuleWalker {
         // nonsense to check for uninitialized properties within such a context.
         return;
     }
-    
+
     private visitClassLikeDeclaration(
         node: ts.ClassDeclaration | ts.ClassExpression,
         superMethodName: 'visitClassDeclaration' | 'visitClassExpression',
